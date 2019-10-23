@@ -118,6 +118,24 @@ abstract class AbstractTaskTests : AbstractFileTests() {
         } finally {
             File("temp.txt").delete()
         }
+        //added test
+        try {
+            sortTemperatures("input/temp_in2.txt", "temp.txt")
+            assertFileContent(
+                "temp.txt",
+                """
+                    -273.0
+                    -180.0
+                    -1.0
+                    0.0
+                    500.0
+                    500.0
+                """.trimIndent()
+            )
+        } finally {
+            File("temp.txt").delete()
+        }
+
 
         fun testGeneratedTemperatures(size: Int): PerfResult<Unit> {
             try {
@@ -278,6 +296,27 @@ abstract class AbstractTaskTests : AbstractFileTests() {
             File("temp.txt").delete()
         }
 
+        //added test
+        try {
+            sortSequence("input/seq_in6.txt", "temp.txt")
+            assertFileContent(
+                "temp.txt",
+                """
+                        2
+                        2
+                        2
+                        3
+                        3
+                        3
+                        1
+                        1
+                        1
+                    """.trimIndent()
+            )
+        } finally {
+            File("temp.txt").delete()
+        }
+
         fun testGeneratedSequence(totalSize: Int, answerSize: Int): PerfResult<Unit> {
             try {
                 val res = generateSequence(totalSize, answerSize)
@@ -326,6 +365,10 @@ abstract class AbstractTaskTests : AbstractFileTests() {
         val result = arrayOf(null, null, null, null, null, 1, 3, 9, 13, 18, 23)
         mergeArrays(arrayOf(4, 9, 15, 20, 23), result)
         assertArrayEquals(arrayOf(1, 3, 4, 9, 9, 13, 15, 18, 20, 23, 23), result)
+
+        val result1 = arrayOf(null, null, null, null, null, null, 2, 7, 12, 15, 28, 32)
+        mergeArrays(arrayOf(1, 4, 9, 14, 20, 30), result1)
+        assertArrayEquals(arrayOf(1, 2, 4, 7, 9, 12, 14, 15, 20, 28, 30, 32), result1)
 
         fun testGeneratedArrays(
             firstSize: Int,

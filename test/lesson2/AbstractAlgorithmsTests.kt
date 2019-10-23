@@ -61,6 +61,7 @@ abstract class AbstractAlgorithmsTests {
     }
 
     fun josephTask(josephTask: (Int, Int) -> Int) {
+        assertEquals(1, josephTask(1, 1000))
         assertEquals(1, josephTask(1, 1))
         assertEquals(2, josephTask(2, 1))
         assertEquals(50000000, josephTask(50000000, 1))
