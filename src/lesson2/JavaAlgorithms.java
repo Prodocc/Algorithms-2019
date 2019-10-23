@@ -34,17 +34,7 @@ public class JavaAlgorithms {
      * В случае обнаружения неверного формата файла бросить любое исключение.
      */
     static public Pair<Integer, Integer> optimizeBuyAndSell(String inputName) {
-        List<Integer> list = new ArrayList<>();
-        try (Scanner scanner = new Scanner(new File(inputName))) {
-            while (scanner.hasNextInt()) {
-                int number = scanner.nextInt();
-                list.add(number);
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        int[] array = new int[list.size() - 1];
-        return new Pair<>(1, 1);
+        throw new NotImplementedError();
     }
 
     /**
