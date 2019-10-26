@@ -55,10 +55,12 @@ public class JavaTasks {
             String number;
             int hours, minutes, seconds;
             for (int i = 0; i < list.size(); i++) {
+                String[] tmpArr;
                 number = list.get(i).split(" ")[0].trim();
-                hours = Integer.parseInt(number.split(":")[0]);
-                minutes = Integer.parseInt(number.split(":")[1]);
-                seconds = Integer.parseInt(number.split(":")[2]);
+                tmpArr = number.split(":");
+                hours = Integer.parseInt(tmpArr[0]);
+                minutes = Integer.parseInt(tmpArr[1]);
+                seconds = Integer.parseInt(tmpArr[2]);
                 if (list.get(i).contains("PM")) {
                     if (hours != 12) {
                         hours += 12;
@@ -88,10 +90,8 @@ public class JavaTasks {
                         out.write(String.format("%02d:%02d:%02d", hours, minutes, seconds) + " PM" + "\n");
                     }
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
             }
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -155,7 +155,7 @@ public class JavaTasks {
      * 24.7
      * 99.5
      * 121.3
-     * Трудоемкость O(n * log(n))
+     * Трудоемкость O(n)
      * Ресурсоемкость O(n)
      */
     static public void sortTemperatures(String inputName, String outputName) {
@@ -166,57 +166,43 @@ public class JavaTasks {
                 list.add(number);
             }
 
-            double[] arr = new double[list.size()];
-            for (int i = 0; i < list.size(); i++) {
-                arr[i] = list.get(i);
+            int[] arr = new int[list.size()];
+            for (int i = 0; i < arr.length; i++) {
+                arr[i] = (int)((1000 + list.get(i)) * 10);
             }
 
-            heapSort(arr);
+            arr = countingSort(arr, 77300);
+
+            double[] resultArray = new double[list.size()];
+            for (int i = 0; i < resultArray.length; i++) {
+                resultArray[i] = (double)(arr[i] - 10000) / 10;
+            }
 
             try (FileWriter out = new FileWriter(outputName)) {
                 for (int i = 0; i < list.size(); i++) {
-                    out.write(arr[i] + "\n");
+                    out.write(resultArray[i] + "\n");
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
             }
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private static void heapify(double[] elements, int start, int length) {
-        int left = 2 * start + 1;
-        int right = left + 1;
-        int max = start;
-        if (left < length && elements[left] > elements[max]) {
-            max = left;
-        }
-        if (right < length && elements[right] > elements[max]) {
-            max = right;
-        }
-        if (max != start) {
-            double temp = elements[max];
-            elements[max] = elements[start];
-            elements[start] = temp;
-            heapify(elements, max, length);
-        }
-    }
 
-    private static void buildHeap(double[] elements) {
-        for (int start = elements.length / 2 - 1; start >= 0; start--) {
-            heapify(elements, start, elements.length);
+    public static int[] countingSort(int[] elements, int limit) {
+        int[] count = new int[limit + 1];
+        for (int element : elements) {
+            count[element]++;
         }
-    }
-
-    public static void heapSort(double[] elements) {
-        buildHeap(elements);
-        for (int j = elements.length - 1; j >= 1; j--) {
-            double temp = elements[0];
-            elements[0] = elements[j];
-            elements[j] = temp;
-            heapify(elements, 0, j);
+        for (int j = 1; j <= limit; j++) {
+            count[j] += count[j - 1];
         }
+        int[] out = new int[elements.length];
+        for (int j = elements.length - 1; j >= 0; j--) {
+            out[count[elements[j]] - 1] = elements[j];
+            count[elements[j]]--;
+        }
+        return out;
     }
 
     /**
